@@ -44,6 +44,7 @@ DEBUG = env("DEBUG")
 # FRONTEND_URL = env("FRONTEND_URL")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 
 INSTALLED_APPS = [
@@ -75,7 +76,7 @@ ROOT_URLCONF = "chattr_gpt.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -140,13 +141,18 @@ USE_I18N = True
 
 USE_TZ = True
 
+VITE_APP_DIR = os.path.join(BASE_DIR, "frontend", "src")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
-STATIC_ROOT = os.path.join(PROJECT_ROOT, "static/")
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    os.path.join(VITE_APP_DIR, "dist"),
+]
+STATIC_ROOT = os.path.join(PROJECT_ROOT, "static/")
 
 
 # Default primary key field type
@@ -166,10 +172,10 @@ REST_FRAMEWORK = {
 }
 
 origins_list = [
-    "http://localhost:3000",
+    "http://localhost:5173",
     "http://localhost:8000",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5173",
     "https://labs.chattr.io",
     "https://api.aws.chattr.io",
 ]
