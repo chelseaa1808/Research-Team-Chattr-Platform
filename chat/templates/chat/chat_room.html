@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Chat</h1>
+
+  <div id="app"></div>
+
+  <div class="chat-box">
+    <div id="message-list" class="message-list">
+      <div class="messages">
+        {% for message in conversation.messages.all %}
+          <div
+            class="message {% if message.actor == "bot" %}bot-message{% else %}user-message{% endif %}">{{ message.text }}</div>
+        {% endfor %}
+      </div>
+    </div>
+    <form id="send-message-form" class="send-message-form" hx-post="{% url 'chat:send_message' %}" hx-swap="beforeend"
+          hx-target=".messages">
+      <input name="message" type="text" placeholder="Type your message" {% if view_only %}disabled{% endif %}>
+      <input name="conversation-id" type="hidden" value="{{ conversation.uuid }}">
+      {% csrf_token %}
+      <button {% if view_only %}disabled{% endif %}>&gt;</button>
+    </form>
+  </div>
+
+
+{% endblock %}
+
+
+{% block inline_javascript %}
+  <script>
+    const vue = new Vue({
+      delimiters: ['[[', ']]'],
+      el: '#app',
+    });
+
+
+    const app = vue.createApp({
+      data: {
+        conversation: {
+          uuid: '{{ conversation.uuid }}',
+          messages: [
+            {% for message in conversation.messages.all %}
+              {
+                text: '{{ message.text }}',
+                actor: '{{ message.actor }}',
+              },
+            {% endfor %}
+          ],
+        },
+      },
+      methods: {
+        sendMessage: function (event) {
+          event.preventDefault();
+          const form = event.target;
+          const data = new FormData(form);
+          fetch(form.getAttribute('action'), {
+            method: 'POST',
+            body: data,
+          }).then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(json => {
+            this.conversation.messages.push({
+              text: json.message,
+              actor: json.actor,
+            });
+          }).catch(error => {
+            console.error(error);
+          });
+        },
+      },
+    });
+    const vm = app.mount('#app')
+  </script>
+{% endblock %}
