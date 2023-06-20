@@ -14,3 +14,16 @@ DATABASE_URL=
 ```
 
 `DATABASE_URL` should be a dj-database-url compatible database string specifying the database type, username and password, and connection info.
+
+The Django server is run with:
+
+```
+python manage.py runserver
+```
+
+The React frontend is run with:
+
+```
+cd frontend
+npm run dev
+```
