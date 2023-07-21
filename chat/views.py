@@ -59,36 +59,15 @@ def conversation_page(request, slug, conversation_uuid):
 @renderer_classes((JSONRenderer,))
 def send_chat_message(request):
     if request.method == "POST":
-
         body = json.loads(request.body)
         user_message_text = body["message"]
         conversation_uuid = body["conversation_id"]
 
         conversation = get_object_or_404(Conversation, uuid=conversation_uuid)
-        user_message = Message()
-        user_message.text = user_message_text
-        user_message.conversation = conversation
-        user_message.actor = user_message.Actors.USER
-        user_message.save()
+        reply = conversation.send_message(user_message_text)
 
-        # Get the chatbot reply(ies)
-        chatbot_reply = send_message(
-            conversation.chat_page.bot, conversation, user_message_text
-        )
-        bot_message = Message()
-        bot_message.text = chatbot_reply
-        bot_message.conversation = conversation
-        bot_message.actor = bot_message.Actors.BOT
-        bot_message.save()
-
-        serializer = MessageSerializer(bot_message)
+        serializer = MessageSerializer(reply)
         return Response(serializer.data)
-        # return render(
-        #     request,
-        #     template_name="chat/chat_message.html",
-        #     context={"message": bot_message},
-        # )
-
 
 
 class ChatPageViewSet(viewsets.ModelViewSet):
@@ -129,7 +108,7 @@ class NewConversation(APIView):
         conversation = Conversation()
         conversation.chat_page = chat_page
         if uid := request.GET.get("uid"):
-            conversation.uid = uid
+            conversation.external_id = uid
         conversation.save()
         serializer = ConversationSerializer(conversation)
         return Response(serializer.data)
@@ -139,3 +118,21 @@ class ListConversations(generics.RetrieveAPIView):
     queryset = ChatPage.objects.all().prefetch_related("conversations")
     serializer_class = ChatPageConversationSerializer  # TODO FIx this so it refers to a serializer that includes conversations
     lookup_field = "slug"
+
+
+class MessageListAPIView(generics.ListAPIView):
+    serializer_class = MessageSerializer
+
+    def get_queryset(self):
+        uuid = self.kwargs["uuid"]
+        conversation = get_object_or_404(Conversation, uuid=uuid)
+        queryset = Message.objects.filter(conversation=conversation)
+        if len(queryset) > 0:
+            return queryset
+        else:
+            return queryset.none()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

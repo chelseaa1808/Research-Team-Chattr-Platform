@@ -20,5 +20,12 @@ urlpatterns = [
     ),
     path("<slug:slug>/", views.GetChatPage.as_view(), name="landing"),
     path("<slug:slug>/new/", views.NewConversation.as_view(), name="new_conversation"),
-    path("<slug:slug>/<uuid>/", views.GetConversation.as_view(), name="conversation"),
+    path(
+        "<slug:slug>/<uuid:uuid>/", views.GetConversation.as_view(), name="conversation"
+    ),
+    path(
+        "<slug:slug>/<uuid:uuid>/messages",
+        views.MessageListAPIView.as_view(),
+        name="messages",
+    ),
 ]

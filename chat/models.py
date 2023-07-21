@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import openai
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models.query import QuerySet
 from django_extensions.db.models import TimeStampedModel
 
 User = get_user_model()
@@ -84,6 +85,8 @@ class Conversation(TimeStampedModel):
     )
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    # for Qualtrics or other external IDs
+    external_id = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return (
@@ -93,7 +96,7 @@ class Conversation(TimeStampedModel):
 
     @property
     def openai_formatted_messages(self):
-        messages = self.messages.all()
+        messages: QuerySet[Message] = self.messages.all()
         formatted_messages = []
         for message in messages:
             formatted_messages.append(
@@ -111,7 +114,7 @@ class Conversation(TimeStampedModel):
         if max_tokens == 0:
             max_tokens = None
         if text:
-            Message.objects.create(converation=self, text=text, actor="user")
+            Message.objects.create(conversation=self, text=text, actor="user")
         response = openai.ChatCompletion.create(
             model=self.chat_page.bot.model,
             messages=self.openai_formatted_messages,
@@ -157,6 +160,7 @@ class Message(TimeStampedModel):
     def save(self, *args, **kwargs):
         # TODO Consider updating this to also update the conversation's modified date
         super().save(*args, **kwargs)
+        self.conversation.save()
 
     class Meta:
         ordering = ("created",)
