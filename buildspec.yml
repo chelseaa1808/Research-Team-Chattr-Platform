@@ -17,4 +17,5 @@ phases:
 artifacts:
   files:
     - "**/*"
-  base-directory: ""
+  exclude-paths:
+    - "frontend/node_modules"
