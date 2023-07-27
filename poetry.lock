@@ -1206,20 +1206,6 @@ docs = ["furo (>=2023.5.20)", "proselint (>=0.13)", "sphinx (>=7.0.1)", "sphinx-
 test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7)", "packaging (>=23.1)", "pytest (>=7.3.1)", "pytest-env (>=0.8.1)", "pytest-freezer (>=0.4.6)", "pytest-mock (>=3.10)", "pytest-randomly (>=3.12)", "pytest-timeout (>=2.1)", "setuptools (>=67.8)", "time-machine (>=2.9)"]
 
 [[package]]
-name = "whitenoise"
-version = "6.5.0"
-description = "Radically simplified static file serving for WSGI applications"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "whitenoise-6.5.0-py3-none-any.whl", hash = "sha256:16468e9ad2189f09f4a8c635a9031cc9bb2cdbc8e5e53365407acf99f7ade9ec"},
-    {file = "whitenoise-6.5.0.tar.gz", hash = "sha256:15fe60546ac975b58e357ccaeb165a4ca2d0ab697e48450b8f0307ca368195a8"},
-]
-
-[package.extras]
-brotli = ["Brotli"]
-
-[[package]]
 name = "yarl"
 version = "1.9.2"
 description = "Yet another URL library"
@@ -1309,4 +1295,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "0e337088dcdf134454b70231603eb7b1f550fa5dfad639da67541fd90ddfd496"
+content-hash = "0b4dec24e7ecae1bcbda11ad0824f3109da5f6efbc915c32e132a5b0ec20c283"
