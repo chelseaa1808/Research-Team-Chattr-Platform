@@ -43,7 +43,7 @@ SECRET_KEY = env("DJANGO_SECRET")
 DEBUG = env("DEBUG")
 # FRONTEND_URL = env("FRONTEND_URL")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["chat.chattr.io", "localhost", "127.0.0.1"]
 INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 
