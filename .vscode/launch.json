@@ -19,7 +19,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "chrome",
-            "url": "http://localhost:5173",
+            "url": "http://localhost:8000",
             "webRoot": "${workspaceFolder}/frontend",
 
         }
