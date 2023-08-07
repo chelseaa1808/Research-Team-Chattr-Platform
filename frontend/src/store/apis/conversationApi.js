@@ -11,7 +11,7 @@ const conversationApi = createApi({
       //   query: () => "/conversations",
       // }),
       getConversation: builder.query({
-        query: (conversationId) => `/conversations/${conversationId}`,
+        query: (conversationId) => `/conversations/${conversationId}/`,
       }),
       createConversation: builder.mutation({
         query: (slug) => ({

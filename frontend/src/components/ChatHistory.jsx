@@ -1,8 +1,24 @@
+import { useRef, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
-import { useGetMessagesQuery } from "../store";
+import { useGetConversationQuery, useGetMessagesQuery } from "../store";
 
 const ChatHistory = ({ slug, uuid }) => {
   const { data, isLoading, isError } = useGetMessagesQuery(uuid);
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [data]);
+
+  const {
+    data: conversation,
+    isLoading: conversationLoading,
+    isError: conversationError,
+  } = useGetConversationQuery(uuid);
+  let botName = "Bot Name";
+  if (conversation) {
+    botName = conversation.chat_page.bot.display_name;
+  }
 
   let content;
   if (isLoading) {
@@ -19,6 +35,7 @@ const ChatHistory = ({ slug, uuid }) => {
       />
     ));
   }
+
   return (
     <>
       {/* Chat header */}
@@ -28,18 +45,14 @@ const ChatHistory = ({ slug, uuid }) => {
           alt=""
           className="object-cover w-10 h-10 rounded-full"
         />
-        <span className="block ml-2 font-bold text-gray-600">
-          Bot Name Placeholder
-        </span>
+        <span className="block ml-2 font-bold text-gray-600">{botName}</span>
         {/* Online green dot */}
         <span className="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
       </div>
       {/* Messages list */}
-      <div
-        id="chatBox"
-        className="space-y-4 relative w-full p-6 overflow-y-auto scroll-smooth h-[30rem]"
-      >
+      <div className="space-y-4 relative w-full p-6 overflow-y-auto scroll-smooth h-[30rem]">
         {content}
+        <div className="float-left clear-both" ref={messagesEndRef}></div>
       </div>
     </>
   );

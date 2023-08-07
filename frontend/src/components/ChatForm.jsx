@@ -1,10 +1,12 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useSendMessageMutation } from "../store";
+import { useGetMessagesQuery } from "../store";
 
 export default function ChatForm({ uuid }) {
   const [message, setMessage] = useState("");
   const [sendMessage, result] = useSendMessageMutation();
+  const { data: messages, updateQueryData } = useGetMessagesQuery();
 
   const handleSubmit = (event) => {
     event.preventDefault();

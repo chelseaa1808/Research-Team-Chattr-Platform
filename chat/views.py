@@ -84,6 +84,7 @@ class ChatPageViewSet(viewsets.ModelViewSet):
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all().prefetch_related("messages", "chat_page")
+    lookup_field = "uuid"
     serializer_class = ConversationSerializer
 
 

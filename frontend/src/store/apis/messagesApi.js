@@ -21,6 +21,26 @@ const messagesApi = createApi({
             "text": message.text,
           },
         }),
+        async onQueryStarted({ uuid, text }, { dispatch, queryFulfilled }) {
+          // Optimistic update
+          const message = {
+            id: 10000000,
+            text,
+            actor: "user",
+            created: new Date().toISOString(),
+          }
+          const patchResult = dispatch(
+            messagesApi.util.updateQueryData("getMessages", uuid, (draft) => {
+              draft.push(message);
+            })
+          )
+          try {
+            await queryFulfilled;
+          } catch {
+            // If the request fails, revert the optimistic update
+            dispatch(patchResult.undo);
+          }
+        }
       }),
     }
   }
