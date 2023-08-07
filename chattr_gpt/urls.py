@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 
 frontend_urls = [
     re_path(
-        r"^$", TemplateView.as_view(template_name="frontend/index.html"), name="home"
+        r"^.*$", TemplateView.as_view(template_name="frontend/index.html"), name="home"
     ),
 ]
 

@@ -12,6 +12,7 @@ router.register(r"chat-pages", views.ChatPageViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("csrf/", views.csrf, name="csrf"),
     path("send_message/", views.send_chat_message, name="send_message"),
     path(
         "<slug:slug>/conversations/",
@@ -24,7 +25,7 @@ urlpatterns = [
         "<slug:slug>/<uuid:uuid>/", views.GetConversation.as_view(), name="conversation"
     ),
     path(
-        "<slug:slug>/<uuid:uuid>/messages",
+        "conversations/<uuid:uuid>/messages/",
         views.MessageListAPIView.as_view(),
         name="messages",
     ),

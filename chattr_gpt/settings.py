@@ -65,7 +65,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -177,12 +177,11 @@ origins_list = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5173",
     "https://labs.chattr.io",
-    "https://api.aws.chattr.io",
 ]
 
 CORS_ALLOWED_ORIGINS = origins_list
 
-CSRF_TRUSTED_ORIGINS = origins_list
+# CSRF_TRUSTED_ORIGINS = origins_list
 
 # CORS_ALLOW_ALL_ORIGINS = True
 

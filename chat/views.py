@@ -1,9 +1,11 @@
 import json
 import logging
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer
@@ -42,6 +44,10 @@ def chat_landing_page(request, slug):
     # return HttpResponse(f"This is the page for {slug}")
 
 
+def csrf(request):
+    return JsonResponse({"csrfToken": get_token(request)})
+
+
 def conversation_page(request, slug, conversation_uuid):
     """Where the magic happens"""
     chat_page = get_object_or_404(ChatPage, slug=slug)
@@ -57,10 +63,11 @@ def conversation_page(request, slug, conversation_uuid):
 
 @api_view(("POST",))
 @renderer_classes((JSONRenderer,))
+@csrf_exempt
 def send_chat_message(request):
     if request.method == "POST":
         body = json.loads(request.body)
-        user_message_text = body["message"]
+        user_message_text = body["text"]
         conversation_uuid = body["conversation_id"]
 
         conversation = get_object_or_404(Conversation, uuid=conversation_uuid)
@@ -126,7 +133,9 @@ class MessageListAPIView(generics.ListAPIView):
     def get_queryset(self):
         uuid = self.kwargs["uuid"]
         conversation = get_object_or_404(Conversation, uuid=uuid)
-        queryset = Message.objects.filter(conversation=conversation)
+        queryset = Message.objects.filter(conversation=conversation).exclude(
+            actor="system"  # Don't show the prompts
+        )
         if len(queryset) > 0:
             return queryset
         else:
