@@ -5,7 +5,7 @@ import { useGetMessagesQuery } from "../store";
 
 export default function ChatForm({ uuid }) {
   const [message, setMessage] = useState("");
-  const [sendMessage, result] = useSendMessageMutation();
+  const [sendMessage, result] = useSendMessageMutation({fixedCacheKey: "message-sending"});
   const { data: messages, updateQueryData } = useGetMessagesQuery();
 
   const handleSubmit = (event) => {

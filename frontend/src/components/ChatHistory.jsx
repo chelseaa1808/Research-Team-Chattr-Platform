@@ -1,12 +1,20 @@
 import { useRef, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
-import { useGetConversationQuery, useGetMessagesQuery } from "../store";
+import {
+  useGetConversationQuery,
+  useGetMessagesQuery,
+  useSendMessageMutation,
+} from "../store";
+import { PulseLoader, FadeLoader } from "react-spinners";
 
 const ChatHistory = ({ slug, uuid }) => {
-  const { data, isLoading, isError } = useGetMessagesQuery(uuid, {
+  const { data, isLoading, isFetching, isError } = useGetMessagesQuery(uuid, {
     skip: !uuid,
   });
   const messagesEndRef = useRef(null);
+  const [sendMessage, { isLoading: isSending }] = useSendMessageMutation({
+    fixedCacheKey: "message-sending",
+  });
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -24,7 +32,11 @@ const ChatHistory = ({ slug, uuid }) => {
 
   let content;
   if (isLoading) {
-    content = <div>Loading...</div>;
+    content = (
+      <div>
+        <FadeLoader color="#314155" />
+      </div>
+    );
   } else if (isError) {
     content = <div>Error!</div>;
   } else {
@@ -35,7 +47,11 @@ const ChatHistory = ({ slug, uuid }) => {
         text={message.text}
         timestamp={message.timestamp}
       />
-    ));
+    )) || (
+      <div className="flex items-center justify-center h-full">
+        <FadeLoader color="#314155" />
+      </div>
+    );
   }
 
   return (
@@ -54,6 +70,11 @@ const ChatHistory = ({ slug, uuid }) => {
       {/* Messages list */}
       <div className="space-y-4 relative w-full p-6 overflow-y-auto scroll-smooth h-[30rem]">
         {content}
+        {(isFetching || isSending) && (
+          <div className="flex items-center pt-8 justify-left">
+            <PulseLoader speedMultiplier={0.7} color="#314155" />
+          </div>
+        )}
         <div className="float-left clear-both" ref={messagesEndRef}></div>
       </div>
     </>
