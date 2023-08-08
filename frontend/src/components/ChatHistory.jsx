@@ -3,7 +3,9 @@ import ChatMessage from "./ChatMessage";
 import { useGetConversationQuery, useGetMessagesQuery } from "../store";
 
 const ChatHistory = ({ slug, uuid }) => {
-  const { data, isLoading, isError } = useGetMessagesQuery(uuid);
+  const { data, isLoading, isError } = useGetMessagesQuery(uuid, {
+    skip: !uuid,
+  });
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -14,7 +16,7 @@ const ChatHistory = ({ slug, uuid }) => {
     data: conversation,
     isLoading: conversationLoading,
     isError: conversationError,
-  } = useGetConversationQuery(uuid);
+  } = useGetConversationQuery(uuid, { skip: !uuid });
   let botName = "Bot Name";
   if (conversation) {
     botName = conversation.chat_page.bot.display_name;
@@ -26,7 +28,7 @@ const ChatHistory = ({ slug, uuid }) => {
   } else if (isError) {
     content = <div>Error!</div>;
   } else {
-    content = data.map((message) => (
+    content = data?.map((message) => (
       <ChatMessage
         key={message.id}
         actor={message.actor}

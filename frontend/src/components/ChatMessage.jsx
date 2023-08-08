@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { Fragment } from "react";
 
 export default function ChatMessage({ actor, text, timestamp }) {
   const selfMessage = actor === "user";
@@ -16,7 +17,15 @@ export default function ChatMessage({ actor, text, timestamp }) {
   return (
     <div className="flow-root">
       <div className={classes}>
-        <span className="block">{text}</span>
+        <span className="block">
+          {/* Split newlines */}
+          {text.split("\n").map((line, index) => (
+            <Fragment key={index}>
+              {line} 
+              <br />
+            </Fragment>
+          ))}  
+        </span>
       </div>
     </div>
   );

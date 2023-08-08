@@ -21,7 +21,7 @@ class ChatPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChatPage
-        fields = ["slug", "experimental_condition", "bot"]
+        fields = ["slug", "experimental_condition", "bot", "disclaimer"]
         depth = 1
 
 
