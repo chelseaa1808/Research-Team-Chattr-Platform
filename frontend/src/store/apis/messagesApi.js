@@ -8,11 +8,11 @@ const messagesApi = createApi({
   endpoints(builder) {
     return {
       getMessages: builder.query({
-        providesTags: ["Messages"],
+        providesTags: (result, error, uuid) => [{ type: "Messages", id: uuid }],
         query: (uuid) => `/conversations/${uuid}/messages/`,
       }),
       sendMessage: builder.mutation({
-        invalidatesTags: ["Messages"],
+        invalidatesTags: (result, error, { uuid }) => [{ type: "Messages", id: uuid }],
         query: (message) => ({
           url: `/send_message/`,
           method: "POST",
