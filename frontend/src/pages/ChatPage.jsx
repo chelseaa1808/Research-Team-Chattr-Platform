@@ -1,7 +1,7 @@
 import ChatHistory from "../components/ChatHistory";
 import { useState, useEffect } from "react";
 import ChatForm from "../components/ChatForm";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   useCreateConversationMutation,
   useGetConversationQuery,
@@ -13,6 +13,7 @@ import {
 
 const ChatPage = () => {
   const { slug, uuid } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [createConversation, result] = useCreateConversationMutation();
   const { data: conversation } = useGetConversationQuery(uuid, { skip: !uuid });
@@ -24,7 +25,11 @@ const ChatPage = () => {
   useEffect(() => {
     // Only create a new conversation if the slug is present and the uuid is not
     if (slug && !uuid) {
-      createConversation(slug).then(({ data }) => {
+      const conversation = {
+        slug,
+        external_id: searchParams.get("uid"),
+      };
+      createConversation(conversation).then(({ data }) => {
         navigate(`/chat/${slug}/${data.uuid}`);
       });
     }

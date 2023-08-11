@@ -25,7 +25,7 @@ class ChatPageAdmin(admin.ModelAdmin):
 @admin.register(Conversation)
 class ConversationAdmin(admin.ModelAdmin):
     list_display = ("chat_page", "modified", "number_of_messages")
-    readonly_fields = ("uuid",)
+    readonly_fields = ("uuid", "external_id")
 
     def number_of_messages(self, obj):
         return obj.messages.count()

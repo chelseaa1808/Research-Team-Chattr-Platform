@@ -14,10 +14,16 @@ const conversationApi = createApi({
         query: (conversationId) => `/conversations/${conversationId}/`,
       }),
       createConversation: builder.mutation({
-        query: (slug) => ({
-          url: `/${slug}/new/`,
-          method: "GET",
-        }),
+        query: (conversation) => {
+          let url = `/${conversation.slug}/new/`;
+          if (conversation.external_id !== undefined) {
+            url += `?uid=${conversation.external_id}`;
+          }
+          return {
+            url,
+            method: "GET",
+          };
+        },
       }),
     }
   },
