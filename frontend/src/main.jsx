@@ -4,12 +4,17 @@ import { Provider } from "react-redux";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
+import * as Sentry from "@sentry/react";
 
 import { store, persistor } from "./store";
 import "./index.css";
 import routes from "./routes";
 import Layout from "./components/Layout";
 import ErrorPage404 from "./pages/ErrorPage404";
+
+Sentry.init({
+  dsn: "https://ca3af9d71a3d67f7399f07c150d50725@o878041.ingest.sentry.io/4505722796965888",
+});
 
 const router = createBrowserRouter([
   {
