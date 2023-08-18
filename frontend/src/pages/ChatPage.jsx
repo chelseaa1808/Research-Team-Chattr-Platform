@@ -25,11 +25,11 @@ const ChatPage = () => {
   useEffect(() => {
     // Only create a new conversation if the slug is present and the uuid is not
     if (slug && !uuid) {
-      const conversation = {
+      const newConversation = {
         slug,
         external_id: searchParams.get("uid"),
       };
-      createConversation(conversation).then(({ data }) => {
+      createConversation(newConversation).then(({ data }) => {
         navigate(`/chat/${slug}/${data.uuid}`);
       });
     }

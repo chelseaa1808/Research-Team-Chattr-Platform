@@ -54,18 +54,26 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "corsheaders",
+    "django.contrib.sites",
+    "rest_framework",
+    "rest_framework.authtoken",
     "users",
     "chat",
-    "rest_framework",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -167,16 +175,21 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
+        "chattr_gpt.authentication.BearerAuthentication",
     ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.ScopedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "dj_rest_auth": "8/minute",
+    },
 }
 
 origins_list = [
     "http://localhost:5173",
     "http://localhost:8000",
     "http://127.0.0.1:5173",
-    "http://127.0.0.1:5173",
-    "https://labs.chattr.io",
+    "https://chat.chattr.io",
 ]
 
 CORS_ALLOWED_ORIGINS = origins_list
@@ -192,6 +205,8 @@ CORS_ALLOWED_ORIGINS = origins_list
 
 log_level = env("LOG_LEVEL")
 
+# Authentication (dj_rest_auth)
+# REST_AUTH = {}
 
 # LOGGING = {
 #     "version": 1,

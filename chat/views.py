@@ -63,7 +63,7 @@ def conversation_page(request, slug, conversation_uuid):
 
 @api_view(("POST",))
 @renderer_classes((JSONRenderer,))
-@csrf_exempt
+# @csrf_exempt
 def send_chat_message(request):
     if request.method == "POST":
         body = json.loads(request.body)

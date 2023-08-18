@@ -1,20 +1,34 @@
 import { Outlet, Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import { Suspense } from "react";
-import { Fragment } from "react";
+import { Suspense, Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useGetUserQuery, useLogoutMutation } from "../store";
 import ChattrLogo from "./ChattrLogo";
 import PathConstants from "../routes/PathConstants";
+import { useSelector } from "react-redux";
 
 export default function Layout() {
-  const user = {
-    name: "Tom Cook",
-    email: "tom@example.com",
-    imageUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  };
+  const key = useSelector((state) => state.auth.key);
+  const {
+    data: user,
+    error,
+    isLoading,
+  } = useGetUserQuery(undefined, { skip: !key });
+
+  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
+
+  function handleLogout() {
+    logout();
+  }
+
+  // const user = {
+  //   name: "Tom Cook",
+  //   email: "tom@example.com",
+  //   imageUrl:
+  //     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  // };
   const navigation = [
     { name: "Home", href: PathConstants.HOME, current: false },
     { name: "Chat", href: PathConstants.BASE_CHAT, current: true },
@@ -66,6 +80,16 @@ export default function Layout() {
                   </div>
                   <div className="hidden md:block">
                     <div className="flex items-center ml-4 md:ml-6">
+                      {/* Logout Button */}
+                      {user && (
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        >
+                          Logout
+                        </button>
+                      )}
                       {/* <button
                         type="button"
                         className="p-1 text-gray-400 bg-gray-800 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -155,7 +179,7 @@ export default function Layout() {
                     </Disclosure.Button>
                   ))}
                 </div>
-                <div className="pt-4 pb-3 border-t border-gray-700">
+                {/* <div className="pt-4 pb-3 border-t border-gray-700">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
                       <img
@@ -192,7 +216,7 @@ export default function Layout() {
                       </Disclosure.Button>
                     ))}
                   </div>
-                </div>
+                </div> */}
               </Disclosure.Panel>
             </>
           )}

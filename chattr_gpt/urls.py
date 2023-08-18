@@ -27,5 +27,8 @@ frontend_urls = [
 
 urlpatterns = [
     path("dQw4w9WgXcQ/", admin.site.urls),
+    path("api/auth/", include("dj_rest_auth.urls")),
+    path("api/auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/", include("chat.urls")),
+    # path("auth/", include("authentication.urls")),
 ] + frontend_urls
