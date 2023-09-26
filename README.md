@@ -1,6 +1,6 @@
 # Chattr GPT
 
-Chattr GPT is a website for creating and interacting with ChatGPT bots.
+Chattr GPT is a website for creating and interacting with ChatGPT bots. It works great all the time.
 
 ## Getting started
 
