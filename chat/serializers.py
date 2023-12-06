@@ -40,7 +40,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Conversation
-        fields = ["uuid", "chat_page", "messages"]
+        fields = ["uuid", "uid", "chat_page", "messages"]
         depth = 2
 
 
