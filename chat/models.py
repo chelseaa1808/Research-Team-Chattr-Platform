@@ -71,7 +71,7 @@ class ChatPage(TimeStampedModel):
     experimental_condition = models.ForeignKey(
         ExperimentalCondition, on_delete=models.CASCADE
     )
-    bot = models.ForeignKey(Bot, on_delete=models.CASCADE)
+    bot = models.ForeignKey(Bot, on_delete=models.CASCADE, related_name="chat_pages")
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     slug = models.SlugField(max_length=200, null=True, blank=True, unique=True)
     disclaimer = models.TextField(blank=True, null=True)
@@ -88,6 +88,7 @@ class Conversation(TimeStampedModel):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     # for Qualtrics or other external IDs
     external_id = models.CharField(max_length=200, blank=True, null=True)
+
 
     def __str__(self):
         return (

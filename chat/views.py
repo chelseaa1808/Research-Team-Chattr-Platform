@@ -19,6 +19,7 @@ from .serializers import (
     ChatPageSerializer,
     ConversationSerializer,
     MessageSerializer,
+    BotSerializer
 )
 
 logger = logging.getLogger(__name__)
@@ -41,8 +42,7 @@ def chat_landing_page(request, slug):
             kwargs={"slug": slug, "conversation_uuid": conversation.uuid},
         )
     )
-    # return HttpResponse(f"This is the page for {slug}")
-
+    # return HttpResponse(f"This is the page for {slug}")   
 
 def csrf(request):
     return JsonResponse({"csrfToken": get_token(request)})
@@ -137,6 +137,39 @@ class MessageListAPIView(generics.ListAPIView):
         queryset = Message.objects.filter(conversation=conversation).exclude(
             actor="system"  # Don't show the prompts
         )
+        if len(queryset) > 0:
+            return queryset
+        else:
+            return queryset.none()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+class BotListAPIView(generics.ListAPIView):
+    serializer_class = BotSerializer
+
+    def get_queryset(self):
+        #need to filter on connection and id and owner id once I figure out the JWT
+        queryset = Bot.objects.all()
+        if len(queryset) > 0:
+            return queryset
+        else:
+            return queryset.none()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+class ConversationAPIView(generics.ListAPIView):
+    serializer_class = ConversationSerializer
+
+    def get_queryset(self):
+        name = self.kwargs["slug"]
+        bot = get_object_or_404(Bot, name=name)
+        queryset = Conversation.objects.filter(chat_page__bot=bot)
         if len(queryset) > 0:
             return queryset
         else:

@@ -36,6 +36,12 @@ const chatApi = createApi({
         providesTags: (result, error, uuid) => [{ type: "Messages", id: uuid }],
         query: (uuid) => `/conversations/${uuid}/messages/`,
       }),
+      getBots: builder.query({
+        query: () => `/bots/`,
+      }),
+      getConversations: builder.query({
+        query: (name) => `/bots/${name}`,
+      }),
       sendMessage: builder.mutation({
         invalidatesTags: (result, error, { uuid }) => [{ type: "Messages", id: uuid }],
         query: (message) => ({
@@ -78,6 +84,8 @@ export const {
   useGetConversationQuery,
   useGetMessagesQuery,
   useSendMessageMutation,
+  useGetBotsQuery,
+  useGetConversationsQuery,
   useLoginMutation,
 } = chatApi;
 export { chatApi };
