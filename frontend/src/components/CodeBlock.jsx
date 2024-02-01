@@ -40,7 +40,7 @@ export default function CopyCodeBlock ({children, language}) {
                 </button>
             </div>
             <code className="">
-               <div className="pl-4">
+               <div className="pl-4 overflow-x-auto">
                     {children}
                </div>
             </code>

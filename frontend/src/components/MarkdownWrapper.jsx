@@ -12,7 +12,7 @@ export default function MarkdownWrapper ({ text }) {
         ...vscDarkPlus,
         'pre[class*="language-"]':{
           ...vscDarkPlus['pre[class*="language-"]'],
-          padding: "0 0 1em 0",
+          padding: "0 0 0 0",
         }
       }
     return (
