@@ -32,11 +32,12 @@ class Bot(TimeStampedModel):
     name = models.CharField(max_length=200)
     display_name = models.CharField(max_length=200, blank=True)
     model_choices = [
+        ("gpt-4-turbo", "GPT-4 Turbo"),
         ("gpt-4", "GPT-4"),
+        ("gpt-3.5-turbo", "GPT-3.5 Turbo"),
         ("gpt-4-0613", "GPT-4-0613"),
         ("gpt-4-32k", "GPT-4-32k"),
         ("gpt-4-32k-0613", "GPT-4-32k-0613"),
-        ("gpt-3.5-turbo", "GPT-3.5 Turbo"),
         ("gpt-3.5-turbo-0613", "GPT-3.5 Turbo-0613"),
         ("gpt-3.5-turbo-16k", "GPT-3.5 Turbo-16k"),
         ("gpt-3.5-turbo-16k-0613", "GPT-3.5 Turbo-16k-0613"),
@@ -88,7 +89,6 @@ class Conversation(TimeStampedModel):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     # for Qualtrics or other external IDs
     external_id = models.CharField(max_length=200, blank=True, null=True)
-
 
     def __str__(self):
         return (
