@@ -32,6 +32,7 @@ class Bot(TimeStampedModel):
     name = models.CharField(max_length=200)
     display_name = models.CharField(max_length=200, blank=True)
     model_choices = [
+        ("gpt-4o-mini", "GPT-4o Mini (new and cheap)"),
         ("gpt-4o", "GPT-4o (newest)"),
         ("gpt-4-turbo", "GPT-4 Turbo"),
         ("gpt-4", "GPT-4"),
