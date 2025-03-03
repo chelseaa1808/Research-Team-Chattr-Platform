@@ -7,6 +7,12 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.query import QuerySet
 from django_extensions.db.models import TimeStampedModel
+from django.http import HttpResponse
+from django.utils.text import slugify
+
+import csv
+import xml.etree.ElementTree as ET
+
 
 User = get_user_model()
 
@@ -91,6 +97,7 @@ class Conversation(TimeStampedModel):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     # for Qualtrics or other external IDs
     external_id = models.CharField(max_length=200, blank=True, null=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
 
     def __str__(self):
         return (
@@ -122,9 +129,11 @@ class Conversation(TimeStampedModel):
         response = openai.ChatCompletion.create(
             model=self.chat_page.bot.model,
             messages=self.openai_formatted_messages,
-            max_tokens=max_tokens,
+            max_tokens=max_tokens if max_tokens and max_tokens > 0 else 500,
+            temperature=0.7,
+            top_p=0.9,
         )
-        logger.info(f"OpenAI response: {response}")
+        logger.info(f"OpenAI API call: user={self.user.id}, bot={self.chat_page.bot.id}")
         Message.objects.create(
             conversation=self,
             text=response.choices[0].message.content,
@@ -135,6 +144,7 @@ class Conversation(TimeStampedModel):
     def save(self, *args, **kwargs):
         if not self.pk:
             # For new conversations
+            self.slug = slugify(f"chat-{self.bot.name}-{uuid.uuid4()}")
             super().save(*args, **kwargs)
             if self.chat_page.bot.system_message:
                 Message.objects.create(
@@ -171,3 +181,19 @@ class Message(TimeStampedModel):
 
     def __str__(self):
         return f"{self.actor}: {self.text}"
+    
+#adding dashboard element
+class UsageLog(models.Model):
+    user = models.ForeignKey("auth.User", on_delete=models.CASCADE, db_index=True)
+    action = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    bot = models.ForeignKey("Bot", on_delete=models.CASCADE, db_index=True)
+    request_data = models.JSONField()
+    response_data = models.JSONField()
+    metadata = models.JSONField(null=True, blank=True)  # Extra info storage
+   
+
+    def __str__(self):
+        return f"{self.user} - {self.action} at {self.timestamp}"
+    
+   

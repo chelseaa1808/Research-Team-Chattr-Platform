@@ -76,6 +76,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    'csp.middleware.CSPMiddleware', 
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -193,6 +194,12 @@ origins_list = [
 ]
 
 CORS_ALLOWED_ORIGINS = origins_list
+
+CSP_FRAME_ANCESTORS = [
+    "'self'",  # Allows embedding on your own site
+    "https://usf.pdx1.qualtrics.com",  # Allowed external domains
+]
+X_FRAME_OPTIONS = 'ALLOWALL'
 
 # CSRF_TRUSTED_ORIGINS = origins_list
 
