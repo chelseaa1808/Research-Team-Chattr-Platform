@@ -12,6 +12,7 @@ RUN npm install && npm cache clean --force
 COPY frontend/ ./
 RUN npm run build
 
+RUN pip install django
 
 # ========================
 # BACKEND: Build Python/Poetry
@@ -48,7 +49,7 @@ RUN poetry install --no-dev
 # FINAL RUNTIME STAGE
 # ========================
 FROM python:3.11-slim-bullseye
-RUN pip install django
+
 # Create Django user
 RUN addgroup --system django && adduser --system --ingroup django django
 
