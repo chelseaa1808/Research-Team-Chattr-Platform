@@ -27,7 +27,7 @@ env = environ.Env(
     ),
     LOG_LEVEL=(str, "INFO"),
 )
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+environ.Env.read_env(os.path.join(BASE_DIR, 'researchchat.env'))
 
 # environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # environ.Env.read_env(Path(BASE_DIR / ".env"))
