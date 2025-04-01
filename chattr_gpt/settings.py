@@ -40,7 +40,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, 'researchchat.env'))
 SECRET_KEY = env("DJANGO_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+DEBUG = False
 # FRONTEND_URL = env("FRONTEND_URL")
 
 #updating webpage name
@@ -163,7 +163,7 @@ STATIC_URL = "static/"
 
 if os.path.exists(BASE_DIR / 'frontend/dist'):
     STATICFILES_DIRS = [BASE_DIR / 'frontend/dist']
-    
+
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "static/")
 
 
@@ -201,7 +201,7 @@ CORS_ALLOWED_ORIGINS = origins_list
 
 X_FRAME_OPTIONS = 'ALLOWALL'
 
-# CSRF_TRUSTED_ORIGINS = origins_list
+CSRF_TRUSTED_ORIGINS = origins_list
 
 # CORS_ALLOW_ALL_ORIGINS = True
 
