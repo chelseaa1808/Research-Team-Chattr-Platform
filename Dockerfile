@@ -12,7 +12,7 @@ RUN npm install && npm cache clean --force
 COPY frontend/ ./
 RUN npm run build
 
-RUN pip install django
+
 
 # ========================
 # BACKEND: Build Python/Poetry
@@ -32,7 +32,8 @@ ENV PYTHONUNBUFFERED=1 \
 # Install system dependencies
 RUN apt update && apt install --no-install-recommends -y \
     build-essential libpq-dev curl
-
+    
+RUN pip install django
 # Install Poetry
 ENV POETRY_VIRTUALENVS_CREATE=false
 RUN pip install "poetry==$POETRY_VERSION"
