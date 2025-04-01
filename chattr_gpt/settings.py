@@ -161,10 +161,9 @@ VITE_APP_DIR = os.path.join(BASE_DIR, "frontend")
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 STATIC_URL = "static/"
 
-STATICFILES_DIRS = [
-  if os.path.exists(BASE_DIR / 'frontend/dist'):
+if os.path.exists(BASE_DIR / 'frontend/dist'):
     STATICFILES_DIRS = [BASE_DIR / 'frontend/dist']
-]
+    
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "static/")
 
 
