@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import openai
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.conf import settings
 from django.db.models.query import QuerySet
 from django_extensions.db.models import TimeStampedModel
 from django.http import HttpResponse
@@ -184,7 +185,7 @@ class Message(TimeStampedModel):
     
 #adding dashboard element
 class UsageLog(models.Model):
-    user = models.ForeignKey("auth.User", on_delete=models.CASCADE, db_index=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     action = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
     bot = models.ForeignKey("Bot", on_delete=models.CASCADE, db_index=True)
