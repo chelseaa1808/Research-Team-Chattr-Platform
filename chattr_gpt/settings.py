@@ -43,7 +43,8 @@ SECRET_KEY = env("DJANGO_SECRET")
 DEBUG = env("DEBUG")
 # FRONTEND_URL = env("FRONTEND_URL")
 
-ALLOWED_HOSTS = ["chat.chattr.io", "localhost", "127.0.0.1"]
+#updating webpage name
+ALLOWED_HOSTS = ["chat.researchchat.io", "localhost", "127.0.0.1"]
 INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 
@@ -190,15 +191,12 @@ origins_list = [
     "http://localhost:5173",
     "http://localhost:8000",
     "http://127.0.0.1:5173",
-    "https://chat.chattr.io",
+    "https://chat.researchchat.io",
 ]
 
 CORS_ALLOWED_ORIGINS = origins_list
 
-CSP_FRAME_ANCESTORS = [
-    "'self'",  # Allows embedding on your own site
-    "https://usf.pdx1.qualtrics.com",  # Allowed external domains
-]
+
 X_FRAME_OPTIONS = 'ALLOWALL'
 
 # CSRF_TRUSTED_ORIGINS = origins_list
@@ -236,3 +234,8 @@ log_level = env("LOG_LEVEL")
 #         },
 #     },
 # }
+CSP_DEFAULT_SRC = ["'self'", "*", "'unsafe-inline'"]
+CSP_FRAME_ANCESTORS = [
+    "'self'",  # Allows embedding on your own site
+    "*.qualtrics.com",  # Allowed external domains
+]

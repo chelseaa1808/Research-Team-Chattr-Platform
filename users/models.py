@@ -4,9 +4,15 @@ from django.db.models import CharField
 
 # Create your models here.
 class User(AbstractUser):
-    """Default user for Chattr Labs."""
+    """Custom user model for Chattr Labs."""
+    
+    # Replacing first and last name with a single 'name' field
+    name = models.CharField("Name of User", max_length=255, blank=True)
+    first_name = None  # Remove default first_name
+    last_name = None  # Remove default last_name
 
-    #: First and last name do not cover name patterns around the globe
-    name = CharField(("Name of User"), blank=True, max_length=255)
-    first_name = None  # type: ignore
-    last_name = None  # type: ignore
+    # Additional field: Bio
+    bio = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.username  # Displays username in admin and shell

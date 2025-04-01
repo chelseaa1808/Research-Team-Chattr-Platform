@@ -1,0 +1,19 @@
+{
+  "name": "research-team-chattr-platform",
+  "version": "1.0.0",
+  "description": "Chattr GPT is a website for creating and interacting with ChatGPT bots. It works great all the time.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "vite": "^6.2.4"
+  }
+}
