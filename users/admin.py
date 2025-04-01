@@ -12,9 +12,10 @@ User = get_user_model()
 class UserAdmin(auth_admin.UserAdmin):
     form = UserAdminChangeForm
     add_form = UserAdminCreationForm
+
     fieldsets = (
         (None, {"fields": ("username", "password")}),
-        ("Personal info", {"fields": ("name", "email")}),
+        ("Personal info", {"fields": ("name", "email", "bio")}),  # Added "bio" here
         (
             "Permissions",
             {
@@ -29,5 +30,6 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
     )
-    list_display = ["username", "name", "is_superuser"]
-    search_fields = ["name"]
+
+    list_display = ["username", "name", "bio", "is_superuser"]  # Added "bio" here
+    search_fields = ["name", "bio"]  # Allows searching by bio in admin
