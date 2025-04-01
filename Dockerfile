@@ -33,10 +33,14 @@ RUN apt update && apt install --no-install-recommends -y \
     build-essential libpq-dev curl
 
 # Install Poetry
+ENV POETRY_VIRTUALENVS_CREATE=false
 RUN pip install "poetry==$POETRY_VERSION"
+RUN python -m pip show django
+COPY --from=backend-build /code /app
 
 # Install Python dependencies
 WORKDIR /code
+COPY . /code/
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-dev
 
@@ -46,26 +50,23 @@ RUN poetry install --no-dev
 # ========================
 FROM python:3.11-slim-bullseye
 
-# Create user
+# Create Django user
 RUN addgroup --system django && adduser --system --ingroup django django
 
-# System deps
+# Install system dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y libpq-dev
 
-# Set environment variables
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
+
+# Set working directory
 WORKDIR /app
 
-# Copy backend code
+# Copy backend code (adjust this!)
 COPY --from=backend-build /code /app
 
-# Copy built frontend
+# Copy built frontend into the same app dir
 COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 
-# Expose port (for dev)
-EXPOSE 8000
-
-# Run Django dev server (for production use Gunicorn!)
+# Run Django server (use Gunicorn in prod!)
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
