@@ -8,10 +8,27 @@ services:
       POSTGRES_DB: chattr_gpt
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - chattr-net
+
+  web:
+    build: .
+    ports:
+      - "8001:8000"  # Host:Container
+    depends_on:
+      - db
+    networks:
+      - chattr-net
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/chattr_gpt
+    volumes:
+      - .:/code
 
 volumes:
   pgdata:
+
+networks:
+  chattr-net:
+    driver: bridge
