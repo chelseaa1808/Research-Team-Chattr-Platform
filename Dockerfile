@@ -36,7 +36,6 @@ RUN apt update && apt install --no-install-recommends -y \
 ENV POETRY_VIRTUALENVS_CREATE=false
 RUN pip install "poetry==$POETRY_VERSION"
 RUN python -m pip show django
-COPY --from=backend-build /code /app
 
 # Install Python dependencies
 WORKDIR /code
