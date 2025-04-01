@@ -110,6 +110,7 @@ DATABASES = {
         default=env("DATABASE_URL"),
         conn_max_age=600,
         conn_health_checks=True,
+        ssl_require=False  # Set to True in production
     )
 }
 DATABASE_URL = env('DATABASE_URL')
