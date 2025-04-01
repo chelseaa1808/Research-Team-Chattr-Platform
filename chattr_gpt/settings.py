@@ -112,7 +112,7 @@ DATABASES = {
         conn_health_checks=True,
     )
 }
-
+DATABASE_URL = env('DATABASE_URL')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
