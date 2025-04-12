@@ -159,7 +159,7 @@ VITE_APP_DIR = os.path.join(BASE_DIR, "frontend")
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
 
 if os.path.exists(BASE_DIR / 'frontend/dist'):
     STATICFILES_DIRS = [BASE_DIR / 'frontend/dist']
